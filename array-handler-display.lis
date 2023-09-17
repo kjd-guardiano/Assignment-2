@@ -37,7 +37,7 @@
     20                                  ;example only
     21                                  align 64
     22                                  ;backup resb 832
-    23                                  ;number_input resq 8
+    23 00000000 <res 40h>               number_input resq 8
     24                                  
     25                                  segment .text
     26                                  ; ==== Start of Code ====
@@ -55,30 +55,30 @@
     37                                  
     38                                  begindisplay:
     39 0000001A 4D39FD                  cmp r13, r15
-    40 0000001D 741A                    je donedisplay ;if r13 > r15, exit
+    40 0000001D 741C                    je donedisplay ;if r13 > r15, exit
     41                                  
     42                                  ;block used for checking array filling
-    43 0000001F 4B8B04EE                mov rax, [r14 + r13*8]
-    44 00000023 48BF-                   mov rdi, receivemsg
-    44 00000025 [6800000000000000] 
-    45 0000002D 50                      push rax
-    46 0000002E E8(00000000)            call printf
-    47 00000033 58                      pop rax
+    43 0000001F F2430F1004EE            movsd xmm0, [r14 + r13*8]
+    44 00000025 48BF-                   mov rdi, receivemsg
+    44 00000027 [6800000000000000] 
+    45 0000002F 50                      push rax
+    46 00000030 E8(00000000)            call printf
+    47 00000035 58                      pop rax
     48                                  
-    49 00000034 49FFC5                  inc r13
+    49 00000036 49FFC5                  inc r13
     50                                  
-    51 00000037 EBE1                    jmp begindisplay
+    51 00000039 EBDF                    jmp begindisplay
     52                                  
     53                                  donedisplay:
-    54 00000039 4C89F0                  mov rax, r14 ;rax is the only register that can move an integer back to caller
+    54 0000003B 4C89F0                  mov rax, r14 ;rax is the only register that can move an integer back to caller
     55                                  
-    56 0000003C B800000000              mov rax, 0
-    57 00000041 48BF-                   mov rdi, endofdisplaymsg
-    57 00000043 [9900000000000000] 
-    58 0000004B 50                      push rax
-    59 0000004C E8(00000000)            call printf
-    60 00000051 58                      pop rax
+    56 0000003E B800000000              mov rax, 0
+    57 00000043 48BF-                   mov rdi, endofdisplaymsg
+    57 00000045 [9900000000000000] 
+    58 0000004D 50                      push rax
+    59 0000004E E8(00000000)            call printf
+    60 00000053 58                      pop rax
     61                                  
-    62 00000052 C3                      ret
+    62 00000054 C3                      ret
     63                                  
     64                                  ; ==== End of Code ====

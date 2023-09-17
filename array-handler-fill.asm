@@ -46,8 +46,7 @@ mov rdi, floatform
 push qword 0
 mov rsi, rsp
 call scanf
-mov r8, rax
-pop rax
+pop r8
 
 ;check for CTRL+D first, places -1 in eax
 cdqe ;rax will fill with whatever is in eax, does NOT have parameters
@@ -56,25 +55,13 @@ je done ;jumps ONLY if equal to "done"
 
 ;pop rbx ;causes a seg fault when included, for some reason?
 mov [r14 + r13*8], r8 ;8 represents one cell
-;block used for checking array filling
-mov rax, [r14 + r13*8]
-mov rdi, receivemsg
-push rax
-call printf
-pop rax
 
 inc r13
 
 jmp begin
 
 done:
-mov rax, r15 ;rax is the only register that can move an integer back to caller
-mov rdi, endoffillmsg
-push rax
-call printf
-pop rax
-
-mov rdi, r14
+mov rax, r13 ;rax is the only register that can move an integer back to caller
 
 ret
 ; ==== End of Code ====

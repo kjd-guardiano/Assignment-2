@@ -20,7 +20,7 @@ segment .bss
 ;example only
 align 64
 ;backup resb 832
-;number_input resq 8
+number_input resq 8
 
 segment .text
 ; ==== Start of Code ====
@@ -40,7 +40,7 @@ cmp r13, r15
 je donedisplay ;if r13 > r15, exit
 
 ;block used for checking array filling
-mov rax, [r14 + r13*8]
+movsd xmm0, [r14 + r13*8]
 mov rdi, receivemsg
 push rax
 call printf

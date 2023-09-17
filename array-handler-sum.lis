@@ -57,46 +57,48 @@
     45                                  ;push       r15                                              ;Back up r15
     46                                  ;pushf                                                       ;Back up rflags
     47                                  ; ==== End of Backup ====
-    48 00000000 4989C6                  mov r14, rax ;to define array
-    49 00000003 6A00                    push qword 0
+    48 00000000 4989FE                  mov r14, rdi ;r14 is the array
+    49 00000003 4989F7                  mov r15, rsi ;r15 is the count of valid numbers in array
     50                                  
-    51 00000005 B800000000              mov rax, 0
-    52 0000000A 48BF-                   mov rdi, startmsg
-    52 0000000C [0000000000000000] 
-    53 00000014 50                      push rax
-    54 00000015 E8(00000000)            call printf
-    55 0000001A 58                      pop rax
+    51 00000006 B800000000              mov rax, 0
+    52 0000000B 48BF-                   mov rdi, startmsg
+    52 0000000D [0000000000000000] 
+    53 00000015 50                      push rax
+    54 00000016 E8(00000000)            call printf
+    55 0000001B 58                      pop rax
     56                                  
-    57 0000001B 4C893425[00000000]      mov [number_input], r14
-    58 00000023 48B9-                   mov rcx, number_input ;to point to current element
-    58 00000025 [0000000000000000] 
-    59 0000002D BA00000000              mov rdx, 0 ;to store sum
+    57 0000001C 4C893425[00000000]      mov [number_input], r14
+    58 00000024 48B9-                   mov rcx, number_input ;to point to current element
+    58 00000026 [0000000000000000] 
+    59 0000002E BA00000000              mov rdx, 0 ;to store sum
     60                                  
     61                                  sumstart:
-    62 00000032 4983FDFF                cmp r13, -1
-    63 00000036 741C                    je sumdone ;jumps ONLY if equal to "done"
-    64 00000038 49FFCD                  dec r13
+    62 00000033 4983FDFF                cmp r13, -1
+    63 00000037 7422                    je sumdone ;jumps ONLY if equal to "done"
+    64                                  
     65                                  
     66                                  ; [TODO] addition here
-    67                                  
-    68 0000003B 4801CA                  add rdx, rcx
-    69                                  
-    70                                  ; [TODO] addition here
-    71 0000003E 4889D0                  mov rax, rdx
-    72 00000041 48BF-                   mov rdi, totalmsg
-    72 00000043 [6D00000000000000] 
-    73 0000004B 52                      push rdx
-    74 0000004C E8(00000000)            call printf
-    75 00000051 5A                      pop rdx
-    76 00000052 EBDE                    jmp sumstart
-    77                                  
-    78                                  sumdone:
-    79 00000054 B800000000              mov rax, 0
-    80 00000059 48BF-                   mov rdi, endmsg
-    80 0000005B [2C00000000000000] 
-    81 00000063 50                      push rax
-    82 00000064 E8(00000000)            call printf
-    83 00000069 58                      pop rax
-    84                                  
-    85                                  ; ==== End of Code ====
-    86 0000006A C3                      ret
+    67 00000039 F2430F1004EE            movsd xmm0, [r14 + r13*8]
+    68 0000003F 4801CA                  add rdx, rcx
+    69                                  ; [TODO] addition here
+    70                                  
+    71 00000042 49FFCD                  dec r13
+    72                                  
+    73 00000045 4889D0                  mov rax, rdx
+    74 00000048 48BF-                   mov rdi, totalmsg
+    74 0000004A [6D00000000000000] 
+    75 00000052 52                      push rdx
+    76 00000053 E8(00000000)            call printf
+    77 00000058 5A                      pop rdx
+    78 00000059 EBD8                    jmp sumstart
+    79                                  
+    80                                  sumdone:
+    81 0000005B B800000000              mov rax, 0
+    82 00000060 48BF-                   mov rdi, endmsg
+    82 00000062 [2C00000000000000] 
+    83 0000006A 50                      push rax
+    84 0000006B E8(00000000)            call printf
+    85 00000070 58                      pop rax
+    86                                  
+    87                                  ; ==== End of Code ====
+    88 00000071 C3                      ret

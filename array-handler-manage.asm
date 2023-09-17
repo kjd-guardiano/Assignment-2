@@ -48,8 +48,8 @@ pushf                                                       ;Back up rflags
 
 ;block to call fill array
 mov rax, 0
-mov rsi, max_size ;gives maximum size for array
 mov rdi, nicearray ;gives address of array
+mov rsi, max_size ;gives maximum size for array
 call fillarray
 mov rbx, rax ;store num elements read in rbx
 
@@ -57,7 +57,8 @@ mov rdi, nicearray
 mov rsi, rbx
 call display
 
-
-;call sumarray
+mov rdi, nicearray
+mov rsi, rbx
+call sumarray
 ret
 ; ==== End of Code ====

@@ -45,8 +45,8 @@ sumarray:
 ;push       r15                                              ;Back up r15
 ;pushf                                                       ;Back up rflags
 ; ==== End of Backup ====
-mov r14, rax ;to define array
-push qword 0
+mov r14, rdi ;r14 is the array
+mov r15, rsi ;r15 is the count of valid numbers in array
 
 mov rax, 0
 mov rdi, startmsg
@@ -61,13 +61,15 @@ mov rdx, 0 ;to store sum
 sumstart:
 cmp r13, -1
 je sumdone ;jumps ONLY if equal to "done"
+
+
+; [TODO] addition here
+movsd xmm0, [r14 + r13*8]
+add rdx, rcx
+; [TODO] addition here
+
 dec r13
 
-; [TODO] addition here
-
-add rdx, rcx
-
-; [TODO] addition here
 mov rax, rdx
 mov rdi, totalmsg
 push rdx

@@ -24,24 +24,6 @@ align 64
 
 segment .text
 ; ==== Start of Code ====
-; ==== Start of Backup ====
-push       rbp                                              ;Save a copy of the stack base pointer
-mov        rbp, rsp                                         ;We do this in order to be 100% compatible with C and C++.
-push       rbx                                              ;Back up rbx
-push       rcx                                              ;Back up rcx
-push       rdx                                              ;Back up rdx
-push       rsi                                              ;Back up rsi
-push       rdi                                              ;Back up rdi
-push       r8                                               ;Back up r8
-push       r9                                               ;Back up r9
-push       r10                                              ;Back up r10
-push       r11                                              ;Back up r11
-push       r12                                              ;Back up r12
-push       r13                                              ;Back up r13
-push       r14                                              ;Back up r14
-push       r15                                              ;Back up r15
-pushf                                                       ;Back up rflags
-; ==== End of Backup ====
 fillarray:
 mov r14, rdi ;backs up incoming data, r14 is the array
 mov r15, rsi ;r15 is # of cells
@@ -81,22 +63,5 @@ jmp begin
 done:
 mov rax, r13 ;rax is the only register that can move an integer back to caller
 
-; ==== Start of Restore ====
-popf
-pop  r15
-pop  r14
-pop  r13
-pop  r12
-pop  r11
-pop  r10
-pop  r9
-pop  r8
-pop  rsi
-pop  rdi
-pop  rdx
-pop  rcx
-pop  rbx
-pop  rbp
-; ==== End of Restore ====
 ret
 ; ==== End of Code ====

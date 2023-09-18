@@ -51,7 +51,7 @@ inc r13
 jmp begindisplay
 
 donedisplay:
-mov rax, r14 ;rax is the only register that can move an integer back to caller
+mov rax, r15 ;rax is the only register that can move an integer back to caller
 
 mov rax, 0
 mov rdi, endofdisplaymsg
@@ -60,5 +60,4 @@ call printf
 pop rax
 
 ret
-
 ; ==== End of Code ====

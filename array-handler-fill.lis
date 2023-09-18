@@ -41,46 +41,81 @@
     24                                  
     25                                  segment .text
     26                                  ; ==== Start of Code ====
-    27                                  fillarray:
-    28 00000000 4989FE                  mov r14, rdi ;backs up incoming data, r14 is the array
-    29 00000003 4989F7                  mov r15, rsi ;r15 is # of cells
-    30                                  
-    31                                  ;Block for message output.
-    32 00000006 B800000000              mov rax, 0 ;rax is a known register, counts # of float registers
-    33 0000000B 48BF-                   mov rdi, msg
-    33 0000000D [0000000000000000] 
-    34 00000015 50                      push rax
-    35 00000016 E8(00000000)            call printf
-    36 0000001B 58                      pop rax
-    37                                  
-    38 0000001C 4D31ED                  xor r13, r13 ;places a 0 within register r13, acts as index; when r13 == 15, array is full
-    39                                  
-    40                                  begin:
-    41 0000001F 4D39FD                  cmp r13, r15
-    42 00000022 742C                    je done ;if r13 > r15, exit
-    43                                  
-    44 00000024 B800000000              mov rax, 0
-    45 00000029 48BF-                   mov rdi, floatform
-    45 0000002B [9400000000000000] 
-    46 00000033 6A00                    push qword 0
-    47 00000035 4889E6                  mov rsi, rsp
-    48 00000038 E8(00000000)            call scanf
-    49 0000003D 4158                    pop r8
-    50                                  
-    51                                  ;check for CTRL+D first, places -1 in eax
-    52 0000003F 4898                    cdqe ;rax will fill with whatever is in eax, does NOT have parameters
-    53 00000041 4883F8FF                cmp rax, -1
-    54 00000045 7409                    je done ;jumps ONLY if equal to "done"
+    27                                  ; ==== Start of Backup ====
+    28 00000000 55                      push       rbp                                              ;Save a copy of the stack base pointer
+    29 00000001 4889E5                  mov        rbp, rsp                                         ;We do this in order to be 100% compatible with C and C++.
+    30 00000004 53                      push       rbx                                              ;Back up rbx
+    31 00000005 51                      push       rcx                                              ;Back up rcx
+    32 00000006 52                      push       rdx                                              ;Back up rdx
+    33 00000007 56                      push       rsi                                              ;Back up rsi
+    34 00000008 57                      push       rdi                                              ;Back up rdi
+    35 00000009 4150                    push       r8                                               ;Back up r8
+    36 0000000B 4151                    push       r9                                               ;Back up r9
+    37 0000000D 4152                    push       r10                                              ;Back up r10
+    38 0000000F 4153                    push       r11                                              ;Back up r11
+    39 00000011 4154                    push       r12                                              ;Back up r12
+    40 00000013 4155                    push       r13                                              ;Back up r13
+    41 00000015 4156                    push       r14                                              ;Back up r14
+    42 00000017 4157                    push       r15                                              ;Back up r15
+    43 00000019 9C                      pushf                                                       ;Back up rflags
+    44                                  ; ==== End of Backup ====
+    45                                  fillarray:
+    46 0000001A 4989FE                  mov r14, rdi ;backs up incoming data, r14 is the array
+    47 0000001D 4989F7                  mov r15, rsi ;r15 is # of cells
+    48                                  
+    49                                  ;Block for message output.
+    50 00000020 B800000000              mov rax, 0 ;rax is a known register, counts # of float registers
+    51 00000025 48BF-                   mov rdi, msg
+    51 00000027 [0000000000000000] 
+    52 0000002F 50                      push rax
+    53 00000030 E8(00000000)            call printf
+    54 00000035 58                      pop rax
     55                                  
-    56                                  ;pop rbx ;causes a seg fault when included, for some reason?
-    57 00000047 4F8904EE                mov [r14 + r13*8], r8 ;8 represents one cell
-    58                                  
-    59 0000004B 49FFC5                  inc r13
-    60                                  
-    61 0000004E EBCF                    jmp begin
-    62                                  
-    63                                  done:
-    64 00000050 4C89E8                  mov rax, r13 ;rax is the only register that can move an integer back to caller
-    65                                  
-    66 00000053 C3                      ret
-    67                                  ; ==== End of Code ====
+    56 00000036 4D31ED                  xor r13, r13 ;places a 0 within register r13, acts as index; when r13 == 15, array is full
+    57                                  
+    58                                  begin:
+    59 00000039 4D39FD                  cmp r13, r15
+    60 0000003C 742C                    je done ;if r13 > r15, exit
+    61                                  
+    62 0000003E B800000000              mov rax, 0
+    63 00000043 48BF-                   mov rdi, floatform
+    63 00000045 [9400000000000000] 
+    64 0000004D 6A00                    push qword 0
+    65 0000004F 4889E6                  mov rsi, rsp
+    66 00000052 E8(00000000)            call scanf
+    67 00000057 4158                    pop r8
+    68                                  
+    69                                  ;check for CTRL+D first, places -1 in eax
+    70 00000059 4898                    cdqe ;rax will fill with whatever is in eax, does NOT have parameters
+    71 0000005B 4883F8FF                cmp rax, -1
+    72 0000005F 7409                    je done ;jumps ONLY if equal to "done"
+    73                                  
+    74                                  ;pop rbx ;causes a seg fault when included, for some reason?
+    75 00000061 4F8904EE                mov [r14 + r13*8], r8 ;8 represents one cell
+    76                                  
+    77 00000065 49FFC5                  inc r13
+    78                                  
+    79 00000068 EBCF                    jmp begin
+    80                                  
+    81                                  done:
+    82 0000006A 4C89E8                  mov rax, r13 ;rax is the only register that can move an integer back to caller
+    83                                  
+    84                                  ; ==== Start of Restore ====
+    85 0000006D 9D                      popf
+    86 0000006E 415F                    pop  r15
+    87 00000070 415E                    pop  r14
+    88 00000072 415D                    pop  r13
+    89 00000074 415C                    pop  r12
+    90 00000076 415B                    pop  r11
+    91 00000078 415A                    pop  r10
+    92 0000007A 4159                    pop  r9
+    93 0000007C 4158                    pop  r8
+    94 0000007E 5E                      pop  rsi
+    95 0000007F 5F                      pop  rdi
+    96 00000080 5A                      pop  rdx
+    97 00000081 59                      pop  rcx
+    98 00000082 5B                      pop  rbx
+    99 00000083 5D                      pop  rbp
+   100                                  ; ==== End of Restore ====
+   101 00000084 C3                      ret
+   102                                  ; ==== End of Code ====

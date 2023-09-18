@@ -12,6 +12,8 @@ startmsg db "Successfully reached start of sum section.", 10, 0
 endmsg db "Successfully reached end of sum section.", 10, 0
 ;decmsg db "r13 is currently %lf.", 10, 0
 totalmsg db "Current total is %lf.", 10, 0
+loopmsg db "Reached loop of sum section.", 10, 0
+checkmsg db "r13 is current %lf.", 10, 0
 
 ; ==== Format Declarations ====
 
@@ -27,50 +29,33 @@ backuparea resb 832
 segment .text
 ; ==== Start of Code ====
 sumarray:
-; ==== Start of Backup ====
-;push       rbp                                              ;Save a copy of the stack base pointer
-;mov        rbp, rsp                                         ;We do this in order to be 100% compatible with C and C++.
-;push       rbx                                              ;Back up rbx
-;push       rcx                                              ;Back up rcx
-;push       rdx                                              ;Back up rdx
-;push       rsi                                              ;Back up rsi
-;push       rdi                                              ;Back up rdi
-;push       r8                                               ;Back up r8
-;push       r9                                               ;Back up r9
-;push       r10                                              ;Back up r10
-;push       r11                                              ;Back up r11
-;push       r12                                              ;Back up r12
-;push       r13                                              ;Back up r13
-;push       r14                                              ;Back up r14
-;push       r15                                              ;Back up r15
-;pushf                                                       ;Back up rflags
-; ==== End of Backup ====
 mov r14, rdi ;r14 is the array
 mov r15, rsi ;r15 is the count of valid numbers in array
 
-mov rax, 0
 mov rdi, startmsg
 push rax
 call printf
 pop rax
 
-xor r13, r13
-xor rcx, rcx
+xor r13, r13 ;r13 as index
 
 sumstart:
 cmp r13, r15
-je sumdone ;jumps ONLY if equal to "done"
+jge sumdone ;jumps ONLY if equal to "done"
 
+mov rdi, loopmsg
+push rax
+call printf
+pop rax
 
 ; [TODO] addition here
-movsd xmm1, [r14 + r13*8]
-addsd xmm0, xmm1
+addsd xmm15, [r14 + 8*r13]
 ; [TODO] addition here
-
 inc r13
 jmp sumstart
 
 sumdone:
+movsd xmm0, xmm15
 
 mov rdi, totalmsg
 push rax
@@ -82,5 +67,5 @@ push rax
 call printf
 pop rax
 
-; ==== End of Code ====
 ret
+; ==== End of Code ====

@@ -52,14 +52,13 @@ mov rdi, nicearray ;gives address of array
 mov rsi, max_size ;gives maximum size for array
 call fillarray
 mov rbx, rax ;store num elements read in rbx
-mov rdx, rax
 
 mov rdi, nicearray
 mov rsi, rbx
 call display
 
 mov rdi, nicearray
-mov rsi, rdx
+mov rsi, rbx
 call sumarray
 ret
 ; ==== End of Code ====

@@ -70,7 +70,7 @@
     51 00000039 EBDF                    jmp begindisplay
     52                                  
     53                                  donedisplay:
-    54 0000003B 4C89F0                  mov rax, r14 ;rax is the only register that can move an integer back to caller
+    54 0000003B 4C89F8                  mov rax, r15 ;rax is the only register that can move an integer back to caller
     55                                  
     56 0000003E B800000000              mov rax, 0
     57 00000043 48BF-                   mov rdi, endofdisplaymsg
@@ -80,5 +80,4 @@
     60 00000053 58                      pop rax
     61                                  
     62 00000054 C3                      ret
-    63                                  
-    64                                  ; ==== End of Code ====
+    63                                  ; ==== End of Code ====

@@ -10,7 +10,7 @@ segment .data
 ; ==== Message Declarations ====
 startmsg db "Successfully reached start of sum section.", 10, 0
 endmsg db "Successfully reached end of sum section.", 10, 0
-decmsg db "r13 is currently %lf.", 10, 0
+;decmsg db "r13 is currently %lf.", 10, 0
 totalmsg db "Current total is %lf.", 10, 0
 
 ; ==== Format Declarations ====
@@ -54,31 +54,29 @@ push rax
 call printf
 pop rax
 
-mov [number_input], r14
-mov rcx, number_input ;to point to current element
-mov rdx, 0 ;to store sum
+xor r13, r13
+xor rcx, rcx
 
 sumstart:
-cmp r13, -1
+cmp r13, r15
 je sumdone ;jumps ONLY if equal to "done"
 
 
 ; [TODO] addition here
-movsd xmm0, [r14 + r13*8]
-add rdx, rcx
+movsd xmm1, [r14 + r13*8]
+addsd xmm0, xmm1
 ; [TODO] addition here
 
-dec r13
-
-mov rax, rdx
-mov rdi, totalmsg
-push rdx
-call printf
-pop rdx
+inc r13
 jmp sumstart
 
 sumdone:
-mov rax, 0
+
+mov rdi, totalmsg
+push rax
+call printf
+pop rax
+
 mov rdi, endmsg
 push rax
 call printf

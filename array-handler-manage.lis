@@ -53,15 +53,16 @@
     52 00000029 BE08000000              mov rsi, max_size ;gives maximum size for array
     53 0000002E E8(00000000)            call fillarray
     54 00000033 4889C3                  mov rbx, rax ;store num elements read in rbx
-    55                                  
-    56 00000036 48BF-                   mov rdi, nicearray
-    56 00000038 [0000000000000000] 
-    57 00000040 4889DE                  mov rsi, rbx
-    58 00000043 E8(00000000)            call display
-    59                                  
-    60 00000048 48BF-                   mov rdi, nicearray
-    60 0000004A [0000000000000000] 
-    61 00000052 4889DE                  mov rsi, rbx
-    62 00000055 E8(00000000)            call sumarray
-    63 0000005A C3                      ret
-    64                                  ; ==== End of Code ====
+    55 00000036 4889C2                  mov rdx, rax
+    56                                  
+    57 00000039 48BF-                   mov rdi, nicearray
+    57 0000003B [0000000000000000] 
+    58 00000043 4889DE                  mov rsi, rbx
+    59 00000046 E8(00000000)            call display
+    60                                  
+    61 0000004B 48BF-                   mov rdi, nicearray
+    61 0000004D [0000000000000000] 
+    62 00000055 4889D6                  mov rsi, rdx
+    63 00000058 E8(00000000)            call sumarray
+    64 0000005D C3                      ret
+    65                                  ; ==== End of Code ====

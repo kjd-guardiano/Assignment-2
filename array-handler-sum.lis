@@ -8,32 +8,24 @@
      8                                  
      9                                  segment .data
     10                                  ; ==== Message Declarations ====
-    11 00000000 537563636573736675-     startmsg db "Successfully reached start of sum section.", 10, 0
-    11 00000009 6C6C79207265616368-
-    11 00000012 656420737461727420-
-    11 0000001B 6F662073756D207365-
-    11 00000024 6374696F6E2E0A00   
-    12 0000002C 537563636573736675-     endmsg db "Successfully reached end of sum section.", 10, 0
-    12 00000035 6C6C79207265616368-
-    12 0000003E 656420656E64206F66-
-    12 00000047 2073756D2073656374-
-    12 00000050 696F6E2E0A00       
+    11                                  ;startmsg db "Successfully reached start of sum section.", 10, 0
+    12                                  ;endmsg db "Successfully reached end of sum section.", 10, 0
     13                                  ;decmsg db "r13 is currently %lf.", 10, 0
-    14 00000056 43757272656E742074-     totalmsg db "Current total is %lf.", 10, 0
-    14 0000005F 6F74616C2069732025-
-    14 00000068 6C662E0A00         
-    15 0000006D 52656163686564206C-     loopmsg db "Reached loop of sum section.", 10, 0
-    15 00000076 6F6F70206F66207375-
-    15 0000007F 6D2073656374696F6E-
-    15 00000088 2E0A00             
-    16 0000008B 723133206973206375-     checkmsg db "r13 is current %lf.", 10, 0
-    16 00000094 7272656E7420256C66-
-    16 0000009D 2E0A00             
+    14 00000000 43757272656E742074-     totalmsg db "Current total is %lf.", 10, 0
+    14 00000009 6F74616C2069732025-
+    14 00000012 6C662E0A00         
+    15 00000017 52656163686564206C-     loopmsg db "Reached loop of sum section.", 10, 0
+    15 00000020 6F6F70206F66207375-
+    15 00000029 6D2073656374696F6E-
+    15 00000032 2E0A00             
+    16 00000035 723133206973206375-     checkmsg db "r13 is current %lf.", 10, 0
+    16 0000003E 7272656E7420256C66-
+    16 00000047 2E0A00             
     17                                  
     18                                  ; ==== Format Declarations ====
     19                                  
-    20 000000A0 256C6600                floatform db "%lf", 0 ;8-byte float format
-    21 000000A4 257300                  stringform db "%s", 0 ;string format
+    20 0000004A 256C6600                floatform db "%lf", 0 ;8-byte float format
+    21 0000004E 257300                  stringform db "%s", 0 ;string format
     22                                  
     23                                  segment .bss
     24                                  align 64
@@ -47,44 +39,31 @@
     32 00000000 4989FE                  mov r14, rdi ;r14 is the array
     33 00000003 4989F7                  mov r15, rsi ;r15 is the count of valid numbers in array
     34                                  
-    35 00000006 48BF-                   mov rdi, startmsg
-    35 00000008 [0000000000000000] 
-    36 00000010 50                      push rax
-    37 00000011 E8(00000000)            call printf
-    38 00000016 58                      pop rax
-    39                                  
-    40 00000017 4D31ED                  xor r13, r13 ;r13 as index
-    41                                  
-    42                                  sumstart:
-    43 0000001A 4D39FD                  cmp r13, r15
-    44 0000001D 7D1C                    jge sumdone ;jumps ONLY if equal to "done"
-    45                                  
-    46 0000001F 48BF-                   mov rdi, loopmsg
-    46 00000021 [6D00000000000000] 
-    47 00000029 50                      push rax
-    48 0000002A E8(00000000)            call printf
-    49 0000002F 58                      pop rax
-    50                                  
-    51                                  ; [TODO] addition here
-    52 00000030 F2470F583CEE            addsd xmm15, [r14 + 8*r13]
-    53                                  ; [TODO] addition here
-    54 00000036 49FFC5                  inc r13
-    55 00000039 EBDF                    jmp sumstart
-    56                                  
-    57                                  sumdone:
-    58 0000003B F2410F10C7              movsd xmm0, xmm15
-    59                                  
-    60 00000040 48BF-                   mov rdi, totalmsg
-    60 00000042 [5600000000000000] 
-    61 0000004A 50                      push rax
-    62 0000004B E8(00000000)            call printf
-    63 00000050 58                      pop rax
-    64                                  
-    65 00000051 48BF-                   mov rdi, endmsg
-    65 00000053 [2C00000000000000] 
-    66 0000005B 50                      push rax
-    67 0000005C E8(00000000)            call printf
-    68 00000061 58                      pop rax
-    69                                  
-    70 00000062 C3                      ret
-    71                                  ; ==== End of Code ====
+    35                                  ; for debugging purposes
+    36                                  ;mov rdi, startmsg
+    37                                  ;push rax
+    38                                  ;call printf
+    39                                  ;pop rax
+    40                                  
+    41 00000006 4D31ED                  xor r13, r13 ;r13 as index
+    42                                  
+    43                                  sumstart:
+    44 00000009 4D39FD                  cmp r13, r15
+    45 0000000C 7D0B                    jge sumdone ;jumps ONLY if equal to "done"
+    46                                  
+    47                                  ; [TODO] addition here
+    48 0000000E F2470F582CEE            addsd xmm13, [r14 + 8*r13]
+    49                                  ; [TODO] addition here
+    50 00000014 49FFC5                  inc r13
+    51 00000017 EBF0                    jmp sumstart
+    52                                  
+    53                                  sumdone:
+    54 00000019 F2410F10C7              movsd xmm0, xmm15
+    55                                  
+    56                                  ;mov rdi, endmsg
+    57                                  ;push rax
+    58                                  ;call printf
+    59                                  ;pop rax
+    60                                  
+    61 0000001E C3                      ret
+    62                                  ; ==== End of Code ====

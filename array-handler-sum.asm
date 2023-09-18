@@ -8,8 +8,8 @@ extern printf ;for calling the function printf
 
 segment .data
 ; ==== Message Declarations ====
-startmsg db "Successfully reached start of sum section.", 10, 0
-endmsg db "Successfully reached end of sum section.", 10, 0
+;startmsg db "Successfully reached start of sum section.", 10, 0
+;endmsg db "Successfully reached end of sum section.", 10, 0
 ;decmsg db "r13 is currently %lf.", 10, 0
 totalmsg db "Current total is %lf.", 10, 0
 loopmsg db "Reached loop of sum section.", 10, 0
@@ -32,10 +32,11 @@ sumarray:
 mov r14, rdi ;r14 is the array
 mov r15, rsi ;r15 is the count of valid numbers in array
 
-mov rdi, startmsg
-push rax
-call printf
-pop rax
+; for debugging purposes
+;mov rdi, startmsg
+;push rax
+;call printf
+;pop rax
 
 xor r13, r13 ;r13 as index
 
@@ -43,13 +44,8 @@ sumstart:
 cmp r13, r15
 jge sumdone ;jumps ONLY if equal to "done"
 
-mov rdi, loopmsg
-push rax
-call printf
-pop rax
-
 ; [TODO] addition here
-addsd xmm15, [r14 + 8*r13]
+addsd xmm13, [r14 + 8*r13]
 ; [TODO] addition here
 inc r13
 jmp sumstart
@@ -57,15 +53,10 @@ jmp sumstart
 sumdone:
 movsd xmm0, xmm15
 
-mov rdi, totalmsg
-push rax
-call printf
-pop rax
-
-mov rdi, endmsg
-push rax
-call printf
-pop rax
+;mov rdi, endmsg
+;push rax
+;call printf
+;pop rax
 
 ret
 ; ==== End of Code ====

@@ -8,30 +8,13 @@
      8                                  
      9                                  segment .data
     10                                  ; ==== Data Declarations ====
-    11 00000000 456E74657220666C6F-     msg db "Enter float numbers separated by white space. After last number, enter white space followed by CTRL+D.", 10, 0
-    11 00000009 6174206E756D626572-
-    11 00000012 732073657061726174-
-    11 0000001B 656420627920776869-
-    11 00000024 74652073706163652E-
-    11 0000002D 204166746572206C61-
-    11 00000036 7374206E756D626572-
-    11 0000003F 2C20656E7465722077-
-    11 00000048 686974652073706163-
-    11 00000051 6520666F6C6C6F7765-
-    11 0000005A 64206279204354524C-
-    11 00000063 2B442E0A00         
-    12 00000068 4E756D626572207265-     receivemsg db "Number received: %lf", 10, 0
-    12 00000071 6365697665643A2025-
-    12 0000007A 6C660A00           
-    13 0000007E 526561636865642073-     startofdisplaymsg db "Reached start of display.", 10, 0
-    13 00000087 74617274206F662064-
-    13 00000090 6973706C61792E0A00 
-    14 00000099 526561636865642065-     endofdisplaymsg db "Reached end of display.", 10, 0
-    14 000000A2 6E64206F6620646973-
-    14 000000AB 706C61792E0A00     
+    11 00000000 256C660A00              receivemsg db "%lf", 10, 0
+    12                                  ; both startof* and endof* are for debugging purposes
+    13                                  ;startofdisplaymsg db "Reached start of display.", 10, 0
+    14                                  ;endofdisplaymsg db "Reached end of display.", 10, 0
     15                                  
     16                                  ; ==== Format Declarations ====
-    17 000000B2 256C6600                floatform db "%lf", 0 ;8-byte float format
+    17 00000005 256C6600                floatform db "%lf", 0 ;8-byte float format
     18                                  
     19                                  segment .bss
     20                                  ;example only
@@ -45,39 +28,39 @@
     28 00000000 4989FE                  mov r14, rdi ;r14 is the array
     29 00000003 4989F7                  mov r15, rsi ;r15 is the count of valid numbers in array
     30                                  
-    31 00000006 48BF-                   mov rdi, startofdisplaymsg
-    31 00000008 [7E00000000000000] 
-    32 00000010 50                      push rax
-    33 00000011 E8(00000000)            call printf
-    34 00000016 58                      pop rax
-    35                                  
-    36 00000017 4D31ED                  xor r13, r13 ;places a 0 within register r13, acts as index; when r13 == 15, array is full
-    37                                  
-    38                                  begindisplay:
-    39 0000001A 4D39FD                  cmp r13, r15
-    40 0000001D 741C                    je donedisplay ;if r13 > r15, exit
-    41                                  
-    42                                  ;block used for checking array filling
-    43 0000001F F2430F1004EE            movsd xmm0, [r14 + r13*8]
-    44 00000025 48BF-                   mov rdi, receivemsg
-    44 00000027 [6800000000000000] 
-    45 0000002F 50                      push rax
-    46 00000030 E8(00000000)            call printf
-    47 00000035 58                      pop rax
-    48                                  
-    49 00000036 49FFC5                  inc r13
-    50                                  
-    51 00000039 EBDF                    jmp begindisplay
-    52                                  
-    53                                  donedisplay:
-    54 0000003B 4C89F8                  mov rax, r15 ;rax is the only register that can move an integer back to caller
-    55                                  
-    56 0000003E B800000000              mov rax, 0
-    57 00000043 48BF-                   mov rdi, endofdisplaymsg
-    57 00000045 [9900000000000000] 
-    58 0000004D 50                      push rax
-    59 0000004E E8(00000000)            call printf
-    60 00000053 58                      pop rax
-    61                                  
-    62 00000054 C3                      ret
-    63                                  ; ==== End of Code ====
+    31                                  ; for debugging purposes
+    32                                  ;mov rdi, startofdisplaymsg
+    33                                  ;push rax
+    34                                  ;call printf
+    35                                  ;pop rax
+    36                                  
+    37 00000006 4D31ED                  xor r13, r13 ;places a 0 within register r13, acts as index; when r13 == 15, array is full
+    38                                  
+    39                                  begindisplay:
+    40 00000009 4D39FD                  cmp r13, r15
+    41 0000000C 741C                    je donedisplay ;if r13 > r15, exit
+    42                                  
+    43                                  ;block used for checking array filling
+    44 0000000E F2430F1004EE            movsd xmm0, [r14 + r13*8]
+    45 00000014 48BF-                   mov rdi, receivemsg
+    45 00000016 [0000000000000000] 
+    46 0000001E 50                      push rax
+    47 0000001F E8(00000000)            call printf
+    48 00000024 58                      pop rax
+    49                                  
+    50 00000025 49FFC5                  inc r13
+    51                                  
+    52 00000028 EBDF                    jmp begindisplay
+    53                                  
+    54                                  donedisplay:
+    55 0000002A 4C89F8                  mov rax, r15 ;rax is the only register that can move an integer back to caller
+    56                                  
+    57                                  ; for debugging purposes
+    58                                  ;mov rax, 0
+    59                                  ;mov rdi, endofdisplaymsg
+    60                                  ;push rax
+    61                                  ;call printf
+    62                                  ;pop rax
+    63                                  
+    64 0000002D C3                      ret
+    65                                  ; ==== End of Code ====

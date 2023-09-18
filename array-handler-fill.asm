@@ -8,7 +8,6 @@ extern printf ;for calling the function printf
 
 segment .data
 ; ==== Data Declarations ====
-msg db "Enter float numbers separated by white space. After last number, enter white space followed by CTRL+D.", 10, 0
 receivemsg db "Number received: %lf", 10, 0
 endoffillmsg db "Reached end of fill.", 10, 0
 
@@ -27,13 +26,6 @@ segment .text
 fillarray:
 mov r14, rdi ;backs up incoming data, r14 is the array
 mov r15, rsi ;r15 is # of cells
-
-;Block for message output.
-mov rax, 0 ;rax is a known register, counts # of float registers
-mov rdi, msg
-push rax
-call printf
-pop rax
 
 xor r13, r13 ;places a 0 within register r13, acts as index; when r13 == 15, array is full
 

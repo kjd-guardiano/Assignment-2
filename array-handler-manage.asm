@@ -50,6 +50,7 @@ push       r15                                              ;Back up r15
 pushf                                                       ;Back up rflags
 ; ==== End of Backup ====
 
+;print message to user to inform input
 mov rax, 0
 mov rdi, stringform
 mov rsi, prefillmsg
@@ -62,11 +63,13 @@ mov rsi, max_size ;gives maximum size for array
 call fillarray
 mov rbx, rax ;store num elements read in rbx
 
+;print message to user to indicate end of input
 mov rax, 0
 mov rdi, stringform
 mov rsi, postfillmsg
 call printf
 
+;call display function
 mov rdi, nicearray
 mov rsi, rbx
 call display
@@ -78,18 +81,23 @@ mov rdi, nicearray
 mov rsi, rbx
 call sumarray
 
+;save result in register
 movsd xmm0, xmm13
 
+;print message for end of sum function
 mov rax, 1
 mov rdi, postsummsg
 call printf
 
+;print exit message
 mov rax, 0
 mov rdi, stringform
 mov rsi, asmexitmsg
 call printf
 
+;begin moving registers to send to c program
 movsd xmm0, xmm13
+mov rax, rbx
 ; ==== Start of Restore ====
 popf
 pop     r15
@@ -106,6 +114,10 @@ pop     rdx
 pop     rcx
 pop     rbx
 pop     rbp
+
+;return array to C module
+;mov qword [rdi], rax
+mov rax, nicearray
 ; ==== End of Restore ====
 ret
 ; ==== End of Code ====

@@ -79,72 +79,85 @@
     50 00000019 9C                      pushf                                                       ;Back up rflags
     51                                  ; ==== End of Backup ====
     52                                  
-    53 0000001A B800000000              mov rax, 0
-    54 0000001F 48BF-                   mov rdi, stringform
-    54 00000021 [0801000000000000] 
-    55 00000029 48BE-                   mov rsi, prefillmsg
-    55 0000002B [0000000000000000] 
-    56 00000033 E8(00000000)            call printf
-    57                                  
-    58                                  ;block to call fill array
-    59 00000038 B800000000              mov rax, 0
-    60 0000003D 48BF-                   mov rdi, nicearray ;gives address of array
-    60 0000003F [0000000000000000] 
-    61 00000047 BE08000000              mov rsi, max_size ;gives maximum size for array
-    62 0000004C E8(00000000)            call fillarray
-    63 00000051 4889C3                  mov rbx, rax ;store num elements read in rbx
-    64                                  
-    65 00000054 B800000000              mov rax, 0
-    66 00000059 48BF-                   mov rdi, stringform
-    66 0000005B [0801000000000000] 
-    67 00000063 48BE-                   mov rsi, postfillmsg
-    67 00000065 [6800000000000000] 
-    68 0000006D E8(00000000)            call printf
-    69                                  
-    70 00000072 48BF-                   mov rdi, nicearray
-    70 00000074 [0000000000000000] 
-    71 0000007C 4889DE                  mov rsi, rbx
-    72 0000007F E8(00000000)            call display
-    73                                  
-    74 00000084 F2440F10E8              movsd xmm13, xmm0
-    75                                  
-    76 00000089 B800000000              mov rax, 0
-    77 0000008E 48BF-                   mov rdi, nicearray
-    77 00000090 [0000000000000000] 
-    78 00000098 4889DE                  mov rsi, rbx
-    79 0000009B E8(00000000)            call sumarray
-    80                                  
-    81 000000A0 F2410F10C5              movsd xmm0, xmm13
-    82                                  
-    83 000000A5 B801000000              mov rax, 1
-    84 000000AA 48BF-                   mov rdi, postsummsg
-    84 000000AC [AA00000000000000] 
-    85 000000B4 E8(00000000)            call printf
+    53                                  ;print message to user to inform input
+    54 0000001A B800000000              mov rax, 0
+    55 0000001F 48BF-                   mov rdi, stringform
+    55 00000021 [0801000000000000] 
+    56 00000029 48BE-                   mov rsi, prefillmsg
+    56 0000002B [0000000000000000] 
+    57 00000033 E8(00000000)            call printf
+    58                                  
+    59                                  ;block to call fill array
+    60 00000038 B800000000              mov rax, 0
+    61 0000003D 48BF-                   mov rdi, nicearray ;gives address of array
+    61 0000003F [0000000000000000] 
+    62 00000047 BE08000000              mov rsi, max_size ;gives maximum size for array
+    63 0000004C E8(00000000)            call fillarray
+    64 00000051 4889C3                  mov rbx, rax ;store num elements read in rbx
+    65                                  
+    66                                  ;print message to user to indicate end of input
+    67 00000054 B800000000              mov rax, 0
+    68 00000059 48BF-                   mov rdi, stringform
+    68 0000005B [0801000000000000] 
+    69 00000063 48BE-                   mov rsi, postfillmsg
+    69 00000065 [6800000000000000] 
+    70 0000006D E8(00000000)            call printf
+    71                                  
+    72                                  ;call display function
+    73 00000072 48BF-                   mov rdi, nicearray
+    73 00000074 [0000000000000000] 
+    74 0000007C 4889DE                  mov rsi, rbx
+    75 0000007F E8(00000000)            call display
+    76                                  
+    77 00000084 F2440F10E8              movsd xmm13, xmm0
+    78                                  
+    79 00000089 B800000000              mov rax, 0
+    80 0000008E 48BF-                   mov rdi, nicearray
+    80 00000090 [0000000000000000] 
+    81 00000098 4889DE                  mov rsi, rbx
+    82 0000009B E8(00000000)            call sumarray
+    83                                  
+    84                                  ;save result in register
+    85 000000A0 F2410F10C5              movsd xmm0, xmm13
     86                                  
-    87 000000B9 B800000000              mov rax, 0
-    88 000000BE 48BF-                   mov rdi, stringform
-    88 000000C0 [0801000000000000] 
-    89 000000C8 48BE-                   mov rsi, asmexitmsg
-    89 000000CA [D200000000000000] 
-    90 000000D2 E8(00000000)            call printf
+    87                                  ;print message for end of sum function
+    88 000000A5 B801000000              mov rax, 1
+    89 000000AA 48BF-                   mov rdi, postsummsg
+    89 000000AC [AA00000000000000] 
+    90 000000B4 E8(00000000)            call printf
     91                                  
-    92 000000D7 F2410F10C5              movsd xmm0, xmm13
-    93                                  ; ==== Start of Restore ====
-    94 000000DC 9D                      popf
-    95 000000DD 415F                    pop     r15
-    96 000000DF 415E                    pop     r14
-    97 000000E1 415D                    pop     r13
-    98 000000E3 415C                    pop     r12
-    99 000000E5 415B                    pop     r11
-   100 000000E7 415A                    pop     r10
-   101 000000E9 4159                    pop     r9
-   102 000000EB 4158                    pop     r8
-   103 000000ED 5F                      pop     rdi
-   104 000000EE 5E                      pop     rsi
-   105 000000EF 5A                      pop     rdx
-   106 000000F0 59                      pop     rcx
-   107 000000F1 5B                      pop     rbx
-   108 000000F2 5D                      pop     rbp
-   109                                  ; ==== End of Restore ====
-   110 000000F3 C3                      ret
-   111                                  ; ==== End of Code ====
+    92                                  ;print exit message
+    93 000000B9 B800000000              mov rax, 0
+    94 000000BE 48BF-                   mov rdi, stringform
+    94 000000C0 [0801000000000000] 
+    95 000000C8 48BE-                   mov rsi, asmexitmsg
+    95 000000CA [D200000000000000] 
+    96 000000D2 E8(00000000)            call printf
+    97                                  
+    98                                  ;begin moving registers to send to c program
+    99 000000D7 F2410F10C5              movsd xmm0, xmm13
+   100 000000DC 4889D8                  mov rax, rbx
+   101                                  ; ==== Start of Restore ====
+   102 000000DF 9D                      popf
+   103 000000E0 415F                    pop     r15
+   104 000000E2 415E                    pop     r14
+   105 000000E4 415D                    pop     r13
+   106 000000E6 415C                    pop     r12
+   107 000000E8 415B                    pop     r11
+   108 000000EA 415A                    pop     r10
+   109 000000EC 4159                    pop     r9
+   110 000000EE 4158                    pop     r8
+   111 000000F0 5F                      pop     rdi
+   112 000000F1 5E                      pop     rsi
+   113 000000F2 5A                      pop     rdx
+   114 000000F3 59                      pop     rcx
+   115 000000F4 5B                      pop     rbx
+   116 000000F5 5D                      pop     rbp
+   117                                  
+   118                                  ;return array to C module
+   119                                  ;mov qword [rdi], rax
+   120 000000F6 48B8-                   mov rax, nicearray
+   120 000000F8 [0000000000000000] 
+   121                                  ; ==== End of Restore ====
+   122 00000100 C3                      ret
+   123                                  ; ==== End of Code ====

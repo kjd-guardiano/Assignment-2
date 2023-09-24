@@ -93,7 +93,7 @@
     61 0000003F [0000000000000000] 
     62 00000047 BE08000000              mov rsi, max_size ;gives maximum size for array
     63 0000004C E8(00000000)            call fillarray
-    64 00000051 4889C3                  mov rbx, rax ;store num elements read in rbx
+    64 00000051 4989C6                  mov r14, rax ;store num elements read in r14
     65                                  
     66                                  ;print message to user to indicate end of input
     67 00000054 B800000000              mov rax, 0
@@ -106,7 +106,7 @@
     72                                  ;call display function
     73 00000072 48BF-                   mov rdi, nicearray
     73 00000074 [0000000000000000] 
-    74 0000007C 4889DE                  mov rsi, rbx
+    74 0000007C 4C89F6                  mov rsi, r14
     75 0000007F E8(00000000)            call display
     76                                  
     77 00000084 F2440F10E8              movsd xmm13, xmm0
@@ -114,7 +114,7 @@
     79 00000089 B800000000              mov rax, 0
     80 0000008E 48BF-                   mov rdi, nicearray
     80 00000090 [0000000000000000] 
-    81 00000098 4889DE                  mov rsi, rbx
+    81 00000098 4C89F6                  mov rsi, r14
     82 0000009B E8(00000000)            call sumarray
     83                                  
     84                                  ;save result in register
@@ -136,7 +136,7 @@
     97                                  
     98                                  ;begin moving registers to send to c program
     99 000000D7 F2410F10C5              movsd xmm0, xmm13
-   100 000000DC 4889D8                  mov rax, rbx
+   100 000000DC 4C89F0                  mov rax, r14
    101                                  ; ==== Start of Restore ====
    102 000000DF 9D                      popf
    103 000000E0 415F                    pop     r15

@@ -61,7 +61,7 @@ mov rax, 0
 mov rdi, nicearray ;gives address of array
 mov rsi, max_size ;gives maximum size for array
 call fillarray
-mov rbx, rax ;store num elements read in rbx
+mov r14, rax ;store num elements read in r14
 
 ;print message to user to indicate end of input
 mov rax, 0
@@ -71,14 +71,14 @@ call printf
 
 ;call display function
 mov rdi, nicearray
-mov rsi, rbx
+mov rsi, r14
 call display
 
 movsd xmm13, xmm0
 
 mov rax, 0
 mov rdi, nicearray
-mov rsi, rbx
+mov rsi, r14
 call sumarray
 
 ;save result in register
@@ -97,7 +97,7 @@ call printf
 
 ;begin moving registers to send to c program
 movsd xmm0, xmm13
-mov rax, rbx
+mov rax, r14
 ; ==== Start of Restore ====
 popf
 pop     r15
@@ -116,7 +116,7 @@ pop     rbx
 pop     rbp
 
 ;return array to C module
-;mov qword [rdi], rax
+mov qword [rdi], rax
 mov rax, nicearray
 ; ==== End of Restore ====
 ret

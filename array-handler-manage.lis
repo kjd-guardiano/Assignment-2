@@ -155,9 +155,9 @@
    116 000000F5 5D                      pop     rbp
    117                                  
    118                                  ;return array to C module
-   119                                  ;mov qword [rdi], rax
-   120 000000F6 48B8-                   mov rax, nicearray
-   120 000000F8 [0000000000000000] 
+   119 000000F6 488907                  mov qword [rdi], rax
+   120 000000F9 48B8-                   mov rax, nicearray
+   120 000000FB [0000000000000000] 
    121                                  ; ==== End of Restore ====
-   122 00000100 C3                      ret
+   122 00000103 C3                      ret
    123                                  ; ==== End of Code ====

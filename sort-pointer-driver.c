@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
  printf("This product is maintained by Katherine Joy Guardiano at kjd.guardiano@csu.fullerton.edu\n");
  sum = manage();
  //printf("The main function received this array:\n");
- //for(int i = 0; i < _MAX_SIZE; i++){
+ //for(int i = 0; i < _MAX_SIZE; i++){  
  // printf("%lf\n",array[i]);
  //}
  printf("The main function received this sum: %lf\n", sum);

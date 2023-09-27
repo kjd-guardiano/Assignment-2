@@ -12,7 +12,6 @@
 double* manage();
 extern double* manage(unsigned long *n);
 // ==== End of Function/Variable/Macro Declarations ====
-
 int main(int argc, char* argv[])
 {
  printf("Welcome to PointerSorter.\n");

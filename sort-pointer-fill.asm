@@ -1,5 +1,9 @@
-;Array Handler - Fill
-;Katherine Joy Guardiano, 240-3
+;Program: Pointer Array Sorter
+;Author: K. Guardiano
+;CWID: 886571256
+;Email: kjd.guardiano@csu.fullerton.edu
+;Course/Section Number: CPSC 240-3 
+;Due Date/Time: October 9, 2023, 1 AM PST
 
 ; ==== Code Area Start ====
 global fillarray
@@ -13,7 +17,6 @@ endoffillmsg db "Reached end of fill.", 10, 0
 
 ; ==== Format Declarations ====
 floatform db "%lf", 0 ;8-byte float format
-arrayform db "%7.4lf 7.4lf 7.4lf", 10, 10, 0
 
 segment .bss
 ;example only

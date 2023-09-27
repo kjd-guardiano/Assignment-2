@@ -1,0 +1,67 @@
+     1                                  ;Program: Pointer Array Sorter
+     2                                  ;Author: K. Guardiano
+     3                                  ;CWID: 886571256
+     4                                  ;Email: kjd.guardiano@csu.fullerton.edu
+     5                                  ;Course/Section Number: CPSC 240-3 
+     6                                  ;Due Date/Time: October 9, 2023, 1 AM PST
+     7                                  
+     8                                  ; ==== Code Area Start ====
+     9                                  global fillarray
+    10                                  extern scanf ;for calling the function scanf
+    11                                  extern printf ;for calling the function printf
+    12                                  
+    13                                  segment .data
+    14                                  ; ==== Data Declarations ====
+    15 00000000 4E756D626572207265-     receivemsg db "Number received: %lf", 10, 0
+    15 00000009 6365697665643A2025-
+    15 00000012 6C660A00           
+    16 00000016 526561636865642065-     endoffillmsg db "Reached end of fill.", 10, 0
+    16 0000001F 6E64206F662066696C-
+    16 00000028 6C2E0A00           
+    17                                  
+    18                                  ; ==== Format Declarations ====
+    19 0000002C 256C6600                floatform db "%lf", 0 ;8-byte float format
+    20                                  
+    21                                  segment .bss
+    22                                  ;example only
+    23                                  align 64
+    24                                  ;backup resb 832
+    25                                  ;number_input resq 8
+    26                                  
+    27                                  segment .text
+    28                                  ; ==== Start of Code ====
+    29                                  fillarray:
+    30 00000000 4989FE                  mov r14, rdi ;backs up incoming data, r14 is the array
+    31 00000003 4989F7                  mov r15, rsi ;r15 is # of cells
+    32                                  
+    33 00000006 4D31ED                  xor r13, r13 ;places a 0 within register r13, acts as index; when r13 == 15, array is full
+    34                                  
+    35                                  begin:
+    36 00000009 4D39FD                  cmp r13, r15
+    37 0000000C 742C                    je done ;if r13 > r15, exit
+    38                                  
+    39 0000000E B800000000              mov rax, 0
+    40 00000013 48BF-                   mov rdi, floatform
+    40 00000015 [2C00000000000000] 
+    41 0000001D 6A00                    push qword 0
+    42 0000001F 4889E6                  mov rsi, rsp
+    43 00000022 E8(00000000)            call scanf
+    44 00000027 4158                    pop r8
+    45                                  
+    46                                  ;check for CTRL+D first, places -1 in eax
+    47 00000029 4898                    cdqe ;rax will fill with whatever is in eax, does NOT have parameters
+    48 0000002B 4883F8FF                cmp rax, -1
+    49 0000002F 7409                    je done ;jumps ONLY if equal to "done"
+    50                                  
+    51                                  ;pop rbx ;causes a seg fault when included, for some reason?
+    52 00000031 4F8904EE                mov [r14 + r13*8], r8 ;8 represents one cell
+    53                                  
+    54 00000035 49FFC5                  inc r13
+    55                                  
+    56 00000038 EBCF                    jmp begin
+    57                                  
+    58                                  done:
+    59 0000003A 4C89E8                  mov rax, r13 ;rax is the only register that can move an integer back to caller
+    60                                  
+    61 0000003D C3                      ret
+    62                                  ; ==== End of Code ====

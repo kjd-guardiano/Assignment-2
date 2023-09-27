@@ -1,0 +1,142 @@
+     1                                  ;Program: Pointer Array Sorter
+     2                                  ;Author: K. Guardiano
+     3                                  ;CWID: 886571256
+     4                                  ;Email: kjd.guardiano@csu.fullerton.edu
+     5                                  ;Course/Section Number: CPSC 240-3 
+     6                                  ;Due Date/Time: October 9, 2023, 1 AM PST
+     7                                  
+     8                                  ; ==== Code Area Start ====
+     9                                  global manage
+    10                                  extern fillarray
+    11                                  extern sumarray
+    12                                  extern display
+    13                                  extern printf ;for calling the function printf
+    14                                  
+    15                                  segment .data
+    16                                  ; ==== Data Declarations ====
+    17                                  max_size equ 8 ;8 cells in the array
+    18                                  
+    19                                  ; ==== Format Declarations ====
+    20 00000000 456E74657220666C6F-     prefillmsg db "Enter float numbers separated by white space. After last number, enter white space followed by CTRL+D.", 10, 0
+    20 00000009 6174206E756D626572-
+    20 00000012 732073657061726174-
+    20 0000001B 656420627920776869-
+    20 00000024 74652073706163652E-
+    20 0000002D 204166746572206C61-
+    20 00000036 7374206E756D626572-
+    20 0000003F 2C20656E7465722077-
+    20 00000048 686974652073706163-
+    20 00000051 6520666F6C6C6F7765-
+    20 0000005A 64206279204354524C-
+    20 00000063 2B442E0A00         
+    21 00000068 5468616E6B20796F75-     postfillmsg db "Thank you for your input. The numbers received in the array are:", 10, 0
+    21 00000071 20666F7220796F7572-
+    21 0000007A 20696E7075742E2054-
+    21 00000083 6865206E756D626572-
+    21 0000008C 732072656365697665-
+    21 00000095 6420696E2074686520-
+    21 0000009E 617272617920617265-
+    21 000000A7 3A0A00             
+    22 000000AA 54686520746F74616C-     postsummsg db "The total sum of these numbers is %lf.", 10 ,0
+    22 000000B3 2073756D206F662074-
+    22 000000BC 68657365206E756D62-
+    22 000000C5 65727320697320256C-
+    22 000000CE 662E0A00           
+    23 000000D2 5468616E6B20796F75-     asmexitmsg db "Thank you for using the Array Management System.", 10, 0
+    23 000000DB 20666F72207573696E-
+    23 000000E4 672074686520417272-
+    23 000000ED 6179204D616E616765-
+    23 000000F6 6D656E742053797374-
+    23 000000FF 656D2E0A00         
+    24 00000104 256C6600                floatform db "%lf", 0 ;8-byte float format
+    25 00000108 257300                  stringform db "%s", 0 ;string format
+    26 0000010B 546869732069732061-     testmsg db "This is a test output.", 10, 0
+    26 00000114 2074657374206F7574-
+    26 0000011D 7075742E0A00       
+    27                                  
+    28                                  segment .bss
+    29                                  align 64
+    30 00000000 <res 340h>              backuparea resb 832 
+    31 00000340 <res 40h>               nicearray resq max_size ;max_size acts as a constant
+    32                                  
+    33                                  segment .text
+    34                                  ; ==== Start of Code ====
+    35                                  manage:
+    36                                  ; ==== Start of Backup ====
+    37 00000000 55                      push       rbp                                              ;Save a copy of the stack base pointer
+    38 00000001 4889E5                  mov        rbp, rsp                                         ;We do this in order to be 100% compatible with C and C++.
+    39 00000004 53                      push       rbx                                              ;Back up rbx
+    40 00000005 51                      push       rcx                                              ;Back up rcx
+    41 00000006 52                      push       rdx                                              ;Back up rdx
+    42 00000007 56                      push       rsi                                              ;Back up rsi
+    43 00000008 57                      push       rdi                                              ;Back up rdi
+    44 00000009 4150                    push       r8                                               ;Back up r8
+    45 0000000B 4151                    push       r9                                               ;Back up r9
+    46 0000000D 4152                    push       r10                                              ;Back up r10
+    47 0000000F 4153                    push       r11                                              ;Back up r11
+    48 00000011 4154                    push       r12                                              ;Back up r12
+    49 00000013 4155                    push       r13                                              ;Back up r13
+    50 00000015 4156                    push       r14                                              ;Back up r14
+    51 00000017 4157                    push       r15                                              ;Back up r15
+    52 00000019 9C                      pushf                                                       ;Back up rflags
+    53                                  ; ==== End of Backup ====
+    54                                  
+    55                                  ;initial message to user
+    56 0000001A B800000000              mov rax, 0
+    57 0000001F 48BF-                   mov rdi, stringform
+    57 00000021 [0801000000000000] 
+    58 00000029 48BE-                   mov rsi, prefillmsg
+    58 0000002B [0000000000000000] 
+    59 00000033 E8(00000000)            call printf
+    60                                  
+    61                                  ;block to call fill array
+    62 00000038 B800000000              mov rax, 0
+    63 0000003D 48BF-                   mov rdi, nicearray ;gives address of array
+    63 0000003F [4003000000000000] 
+    64 00000047 BE08000000              mov rsi, max_size ;gives maximum size for array
+    65 0000004C E8(00000000)            call fillarray
+    66 00000051 4989C5                  mov r13, rax ;store num elements read in rbx
+    67                                  
+    68                                  ;block to indicate end of user input, begin display section
+    69 00000054 B800000000              mov rax, 0
+    70 00000059 48BF-                   mov rdi, stringform
+    70 0000005B [0801000000000000] 
+    71 00000063 48BE-                   mov rsi, postfillmsg
+    71 00000065 [6800000000000000] 
+    72 0000006D E8(00000000)            call printf
+    73                                  
+    74                                  ;output for elements in array
+    75 00000072 48BF-                   mov rdi, nicearray
+    75 00000074 [4003000000000000] 
+    76 0000007C 4C89EE                  mov rsi, r13
+    77 0000007F E8(00000000)            call display
+    78                                  
+    79                                  ;mov rax, 0
+    80                                  ;mov rdi, stringform
+    81                                  ;mov rsi, asmexitmsg
+    82                                  ;call printf
+    83                                  
+    84                                  ; ==== Start of Restore ====
+    85 00000084 9D                      popf
+    86 00000085 415F                    pop     r15
+    87 00000087 415E                    pop     r14
+    88 00000089 415D                    pop     r13
+    89 0000008B 415C                    pop     r12
+    90 0000008D 415B                    pop     r11
+    91 0000008F 415A                    pop     r10
+    92 00000091 4159                    pop     r9
+    93 00000093 4158                    pop     r8
+    94 00000095 5F                      pop     rdi
+    95 00000096 5E                      pop     rsi
+    96 00000097 5A                      pop     rdx
+    97 00000098 59                      pop     rcx
+    98 00000099 5B                      pop     rbx
+    99 0000009A 5D                      pop     rbp
+   100                                  ; ==== End of Restore ====
+   101                                  
+   102 0000009B 488907                  mov qword [rdi], rax
+   103 0000009E 48B8-                   mov rax, nicearray    ; Return the array to the C module
+   103 000000A0 [4003000000000000] 
+   104                                  
+   105 000000A8 C3                      ret
+   106                                  ; ==== End of Code ====

@@ -1,7 +1,11 @@
 #!/bin/bash
 
-#Program: Array Manager
+#Program: Pointer Array Sorter
 #Author: K. Guardiano
+#CWID: 886571256
+#Email: kjd.guardiano@csu.fullerton.edu
+#Course/Section Number: CPSC 240-3 
+#Due Date/Time: October 9, 2023, 1 AM PST
 
 #Delete some un-needed files
 rm *.o
@@ -24,7 +28,7 @@ echo "Assemble sort-pointer-display.asm"
 nasm -f elf64 -l sort-pointer-display.lis -o sort-pointer-display.o sort-pointer-display.asm
 
 echo "Link the object files using the gcc linker standard 2017"
-gcc -m64 -no-pie -o sort-pointer.out -std=c17 sort-pointer-driver.o sort-pointer-manage.o sort-pointer-fill.o sort-pointer-display.o sort-pointer-sum.o #-fno-pie -no-pie
+gcc -m64 -no-pie -o sort-pointer.out -std=c17 sort-pointer-driver.o sort-pointer-manage.o sort-pointer-fill.o sort-pointer-display.o #-fno-pie -no-pie
 
 echo "Run the program Array Management:"
 ./sort-pointer.out

@@ -1,12 +1,15 @@
-;Array Handler - Manage
-;Katherine Joy Guardiano, 240-3
+;Program: Pointer Array Sorter
+;Author: K. Guardiano
+;CWID: 886571256
+;Email: kjd.guardiano@csu.fullerton.edu
+;Course/Section Number: CPSC 240-3 
+;Due Date/Time: October 9, 2023, 1 AM PST
 
 ; ==== Code Area Start ====
 global manage
 extern fillarray
 extern sumarray
 extern display
-extern scanf ;for calling the function scanf
 extern printf ;for calling the function printf
 
 segment .data
@@ -23,10 +26,9 @@ stringform db "%s", 0 ;string format
 testmsg db "This is a test output.", 10, 0
 
 segment .bss
-nicearray resq max_size ;max_size acts as a constant
-
 align 64
-backuparea resq 832 
+backuparea resb 832 
+nicearray resq max_size ;max_size acts as a constant
 
 segment .text
 ; ==== Start of Code ====
@@ -50,6 +52,7 @@ push       r15                                              ;Back up r15
 pushf                                                       ;Back up rflags
 ; ==== End of Backup ====
 
+;initial message to user
 mov rax, 0
 mov rdi, stringform
 mov rsi, prefillmsg
@@ -60,36 +63,24 @@ mov rax, 0
 mov rdi, nicearray ;gives address of array
 mov rsi, max_size ;gives maximum size for array
 call fillarray
-mov rbx, rax ;store num elements read in rbx
+mov r13, rax ;store num elements read in rbx
 
+;block to indicate end of user input, begin display section
 mov rax, 0
 mov rdi, stringform
 mov rsi, postfillmsg
 call printf
 
+;output for elements in array
 mov rdi, nicearray
-mov rsi, rbx
+mov rsi, r13
 call display
 
-movsd xmm13, xmm0
+;mov rax, 0
+;mov rdi, stringform
+;mov rsi, asmexitmsg
+;call printf
 
-mov rax, 0
-mov rdi, nicearray
-mov rsi, rbx
-call sumarray
-
-movsd xmm0, xmm13
-
-mov rax, 1
-mov rdi, postsummsg
-call printf
-
-mov rax, 0
-mov rdi, stringform
-mov rsi, asmexitmsg
-call printf
-
-movsd xmm0, xmm13
 ; ==== Start of Restore ====
 popf
 pop     r15
@@ -107,5 +98,9 @@ pop     rcx
 pop     rbx
 pop     rbp
 ; ==== End of Restore ====
+
+mov qword [rdi], rax
+mov rax, nicearray    ; Return the array to the C module
+
 ret
 ; ==== End of Code ====

@@ -1,0 +1,69 @@
+     1                                  ;Program: Pointer Array Sorter
+     2                                  ;Author: K. Guardiano
+     3                                  ;CWID: 886571256
+     4                                  ;Email: kjd.guardiano@csu.fullerton.edu
+     5                                  ;Course/Section Number: CPSC 240-3 
+     6                                  ;Due Date/Time: October 9, 2023, 1 AM PST
+     7                                  
+     8                                  ; ==== Code Area Start ====
+     9                                  global display
+    10                                  extern scanf ;for calling the function scanf
+    11                                  extern printf ;for calling the function printf
+    12                                  
+    13                                  segment .data
+    14                                  ; ==== Data Declarations ====
+    15 00000000 256C660A00              receivemsg db "%lf", 10, 0
+    16                                  ; both startof* and endof* are for debugging purposes
+    17 00000005 526561636865642073-     startofdisplaymsg db "Reached start of display.", 10, 0
+    17 0000000E 74617274206F662064-
+    17 00000017 6973706C61792E0A00 
+    18 00000020 526561636865642065-     endofdisplaymsg db "Reached end of display.", 10, 0
+    18 00000029 6E64206F6620646973-
+    18 00000032 706C61792E0A00     
+    19                                  
+    20                                  ; ==== Format Declarations ====
+    21 00000039 256C6600                floatform db "%lf", 0 ;8-byte float format
+    22                                  
+    23                                  segment .bss
+    24                                  ;example only
+    25                                  align 64
+    26                                  ;backup resb 832
+    27 00000000 <res 40h>               number_input resq 8
+    28                                  
+    29                                  segment .text
+    30                                  ; ==== Start of Code ====
+    31                                  display:
+    32 00000000 4989FE                  mov r14, rdi ;r14 is the array
+    33 00000003 4989F7                  mov r15, rsi ;r15 is the count of valid numbers in array
+    34                                  
+    35 00000006 4D31ED                  xor r13, r13 ;places a 0 within register r13, acts as index; when r13 == 15, array is full
+    36                                  
+    37                                  begindisplay:
+    38 00000009 4D39FD                  cmp r13, r15
+    39 0000000C 741C                    je donedisplay ;if r13 > r15, exit
+    40                                  
+    41                                  ;block used for checking array filling
+    42 0000000E F2430F1004EE            movsd xmm0, [r14 + r13*8]
+    43 00000014 48BF-                   mov rdi, receivemsg
+    43 00000016 [0000000000000000] 
+    44 0000001E 50                      push rax
+    45 0000001F E8(00000000)            call printf
+    46 00000024 58                      pop rax
+    47                                  
+    48 00000025 49FFC5                  inc r13
+    49                                  
+    50 00000028 EBDF                    jmp begindisplay
+    51                                  
+    52                                  donedisplay:
+    53 0000002A 4C89F8                  mov rax, r15 ;rax is the only register that can move an integer back to caller
+    54                                  
+    55                                  ; for debugging purposes
+    56 0000002D B800000000              mov rax, 0
+    57 00000032 48BF-                   mov rdi, endofdisplaymsg
+    57 00000034 [2000000000000000] 
+    58 0000003C 50                      push rax
+    59 0000003D E8(00000000)            call printf
+    60 00000042 58                      pop rax
+    61                                  
+    62 00000043 C3                      ret
+    63                                  ; ==== End of Code ====

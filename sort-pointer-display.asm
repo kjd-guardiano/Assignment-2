@@ -1,5 +1,9 @@
-;Array Handler - Display
-;Katherine Joy Guardiano, 240-3
+;Program: Pointer Array Sorter
+;Author: K. Guardiano
+;CWID: 886571256
+;Email: kjd.guardiano@csu.fullerton.edu
+;Course/Section Number: CPSC 240-3 
+;Due Date/Time: October 9, 2023, 1 AM PST
 
 ; ==== Code Area Start ====
 global display
@@ -10,8 +14,8 @@ segment .data
 ; ==== Data Declarations ====
 receivemsg db "%lf", 10, 0
 ; both startof* and endof* are for debugging purposes
-;startofdisplaymsg db "Reached start of display.", 10, 0
-;endofdisplaymsg db "Reached end of display.", 10, 0
+startofdisplaymsg db "Reached start of display.", 10, 0
+endofdisplaymsg db "Reached end of display.", 10, 0
 
 ; ==== Format Declarations ====
 floatform db "%lf", 0 ;8-byte float format
@@ -27,12 +31,6 @@ segment .text
 display:
 mov r14, rdi ;r14 is the array
 mov r15, rsi ;r15 is the count of valid numbers in array
-
-; for debugging purposes
-;mov rdi, startofdisplaymsg
-;push rax
-;call printf
-;pop rax
 
 xor r13, r13 ;places a 0 within register r13, acts as index; when r13 == 15, array is full
 
@@ -55,11 +53,11 @@ donedisplay:
 mov rax, r15 ;rax is the only register that can move an integer back to caller
 
 ; for debugging purposes
-;mov rax, 0
-;mov rdi, endofdisplaymsg
-;push rax
-;call printf
-;pop rax
+mov rax, 0
+mov rdi, endofdisplaymsg
+push rax
+call printf
+pop rax
 
 ret
 ; ==== End of Code ====
